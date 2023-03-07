@@ -41,6 +41,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
     private final FloatBuffer vertexData;
     private int uColorLocation;
     private int aPositionLocation;
+    private int uSize;
 
     public AirHockeyRenderer(Context context){
         this.context = context;
@@ -56,7 +57,23 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
                 -0.5f, 0f, 0.5f, 0f,
 
                 // Mallets
-                0f, -0.25f, 0f, 0.25f
+                0f, -0.25f, 0f, 0.25f,
+
+                // Puck
+                0.0f, 0.0f,
+
+                // Bottom Line Border
+                -0.5f, -0.5f, 0.5f, -0.5f,
+
+                // Bottom Line Border
+                -0.5f, 0.5f, 0.5f, 0.5f,
+
+                // Left Line Border
+                -0.5f, 0.5f, -0.5f, -0.5f,
+
+                // Right Line Border
+                0.5f, 0.5f, 0.5f, -0.5f
+
         };
 
         vertexData = ByteBuffer.allocateDirect(
@@ -85,6 +102,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
 
         uColorLocation = glGetUniformLocation(program, "u_Color");
         aPositionLocation = glGetAttribLocation(program, "a_Position");
+        uSize = glGetUniformLocation(program,"u_Size");
 
         vertexData.position(0);
         glVertexAttribPointer(aPositionLocation, POSITION_COMPONENT_COUNT, GL_FLOAT, false, 0, vertexData);
@@ -105,21 +123,52 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
 
         //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+        // Triangles
         glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        glLineWidth(50f);
-        glUniform4f(uColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
+        // Line 1
+        glLineWidth(5f);
+        glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 0.0f);
         glDrawArrays(GL_LINES, 6, 2);
 
         // Draw the first mallet blue.
+        glUniform1f(uSize, 30.0f);
         glUniform4f(uColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
         glDrawArrays(GL_POINTS, 8, 1);
 
         // Draw the second malled red.
+        glUniform1f(uSize, 30.0f);
         glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
         glDrawArrays(GL_POINTS, 9, 1);
 
+
+
+        // Red puck in the center
+        glUniform1f(uSize, 15.0f);
+        glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+        glDrawArrays(GL_POINTS, 10, 1);
+
+
+        // Bottom Border Line
+        glLineWidth(10f);
+        glUniform4f(uColorLocation, 0.0f, 0.0f, 0.0f, 0.0f);
+        glDrawArrays(GL_LINES, 11, 2);
+
+        // Top Border Line
+        glLineWidth(10f);
+        glUniform4f(uColorLocation, 0.0f, 0.0f, 0.0f, 0.0f);
+        glDrawArrays(GL_LINES, 13, 2);
+
+        // Left Border Line
+        glLineWidth(10f);
+        glUniform4f(uColorLocation, 0.0f, 0.0f, 0.0f, 0.0f);
+        glDrawArrays(GL_LINES, 15, 2);
+
+        // Right Border Line
+        glLineWidth(10f);
+        glUniform4f(uColorLocation, 0.0f, 0.0f, 0.0f, 0.0f);
+        glDrawArrays(GL_LINES, 17, 2);
     }
 
 
